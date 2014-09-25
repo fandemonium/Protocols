@@ -3,12 +3,12 @@ Sequential Extraction For Peat Microbial Biomass Carbon and Nitrogen Analyses
 Adopted from 
 =========
 
-Subsample peat (stored at +4ºC)
-1.	One subsample for determining gravimetric soil moisture 
->a.	\>15 g/sample in pre-weighted aluminum trays
-i.	the more sample the better
-ii.	peat (especially fresh peat) contains ~90% of water
-b.	Dried peat can be stored in coin bags 
++ **Subsample peat (stored at +4ºC)**
+         1.	One subsample for determining gravimetric soil moisture 
+                      a.	\>15 g/sample in pre-weighted aluminum trays
+                                      i.	the more sample the better
+                                      ii.	peat (especially fresh peat) contains ~90% of water
+b.	Dried peat can be stored in co:in bags 
 c.	Part of the dried peats can be used to determine soil pH (per location, per geography)
 2.	One subsample for sequential extraction
 a.	Directly subsample into 50ml conical tubes
