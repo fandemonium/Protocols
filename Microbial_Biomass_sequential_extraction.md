@@ -22,7 +22,7 @@ Adopted from
         1. 1:3 soil weight/K<sub>2</sub>SO<sub>4</sub> volume   
     2. Place on shaker for 2 hours at 200 rpm at room temp (~23ºC)   
     3. Balance tubes and centrifuge at 4000 rpm for 20 min   
-    4. Gravity filter the supernatant through K2SO4 leached filter papers   
+    4. Gravity filter the supernatant through K<sub>2</sub>SO<sub>4</sub> leached filter papers   
         2. Into pre-labeled 25ml scintillation vials   
         3. Pour carefully to avoid splashes  
             1. In-growth peat is really fine and may fall out as a big chunk when pouring   
