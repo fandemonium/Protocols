@@ -3,13 +3,24 @@ Sequential Extraction For Peat Microbial Biomass Carbon and Nitrogen Analyses
 Adopted from 
 ------------
 
+1. Preparations (at least 2 days before extraction!!):   
+    1. Make 0.5M K<sub>2</sub>SO<sub>4</sub> solution
+	1. **Hard to dissolve!**
+        2. Make 2L or 4L at once in a big erlenmeyer flask
+	3. Dissolve by applying low heat (Do not boil!)
+	4. Use a 2L volumetric flask to bring the solution to final volume quantitatively  
+    1. Pre-leach filter papers  
+	1. Whatman #42: 2.5µm, 11cm diameter  
+	2. Use a Buchner funnel and side-armed flask vacuume set-up  
+	3. Stack 10 filter papers in the funnel (lay flat), pump ~20ml K<sub>2</sub>SO<sub>4</sub> onto the stack, then turn on the vacuume to suck the salt solution through   
+	4. Repeat the above step for each stack of 10 three times    
+
 1. 1st extraction:   
-    1. Add 24ml 0.5 M K2SO4 directly into the subsampled soil containing tubes   
+    1. Add 24ml 0.5 M K<sub>2</sub>SO<sub>4</sub> directly into the subsampled soil containing tubes   
         1. 1:3 soil weight/K<sub>2</sub>SO<sub>4</sub> volume   
     2. Place on shaker for 2 hours at 200 rpm at room temp (~23ºC)   
     3. Balance tubes and centrifuge at 4000 rpm for 20 min   
     4. Gravity filter the supernatant through K2SO4 leached filter papers   
-        1. Whatman #42: 2.5μm   
         2. Into pre-labeled 25ml scintillation vials   
         3. Pour carefully to avoid splashes  
             1. In-growth peat is really fine and may fall out as a big chunk when pouring   
