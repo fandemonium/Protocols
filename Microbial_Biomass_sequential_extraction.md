@@ -46,4 +46,4 @@ Adopted from
         1. Use vacuum pump to evacuate excess chloroform fume for 5 X 1min.   
 3. 2nd extraction:   
     1. Extract aired pellets with 0.5M K<sub>2</sub>SO<sub>4</sub>   
-        1. Repeat 1st extraction step a). through d).   
+        1. Repeat 1st extraction step 2 (1st extraction) 
