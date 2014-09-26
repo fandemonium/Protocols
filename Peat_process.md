@@ -13,19 +13,19 @@ Subsample peat (stored at +4ºC until all subsampled)
         1. Directly subsample into 50ml conical tubes, record the exact weight!   
         2. 8.1 ± 0.1 g    
     3. One subsample for DNA extraction   
-        1. In Whirl Pack
-        2. 20-30 g/sample
-        3. Store at -80ºC
-    4. One subsample for Ergosterol analysis
-	1. In Whirl Pack
-        2. 15-20 g/sample
-	3. Store at -20ºC
-    5. One subsample for soil enzyme analysis
-	1. In Whirl Pack
-	2. 10-15 g/sample
-	3. Store at -20ºC
-    6. Archive samples
-	1. In Whirl Pack
-	2. Should have />10g left
-	3. Store at -80ºC 
+        1. In Whirl Pack  
+        2. 20-30 g/sample  
+        3. Store at \-80ºC  
+    4. One subsample for Ergosterol analysis  
+	1. In Whirl Pack  
+        2. 15\-20 g/sample  
+	3. Store at \-20ºC  
+    5. One subsample for soil enzyme analysis  
+	1. In Whirl Pack  
+	2. 10\-15 g/sample   
+	3. Store at \-20ºC  
+    6. Archive samples  
+	1. In Whirl Pack  
+	2. Should have />10g left  
+	3. Store at \-80ºC  
 
