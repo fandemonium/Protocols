@@ -9,7 +9,7 @@ Adopted from
             1. the more sample the better   
             2. peat (especially fresh peat) contains ~90% of water   
         2. Dried peat can be stored in co:in bags   
-        3.Part of the dried peats can be used to determine soil pH (per location, per geography)   
+        3. Part of the dried peats can be used to determine soil pH (per location, per geography)   
     2. One subsample for sequential extraction   
         1. Directly subsample into 50ml conical tubes
         2. 8.1 ± 0.1 g    
