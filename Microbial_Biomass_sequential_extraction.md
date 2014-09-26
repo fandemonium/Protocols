@@ -4,6 +4,8 @@ Adopted from
 ------------
 
 + **Subsample peat (stored at +4ºC until all subsampled)**  
+
+```
     1. One subsample for determining gravimetric soil moisture  
         1. \>15 g/sample in pre-weighted aluminum trays   
             1. the more sample the better   
@@ -13,8 +15,11 @@ Adopted from
     2. One subsample for sequential extraction   
         1. Directly subsample into 50ml conical tubes
         2. 8.1 ± 0.1 g    
+```
 
 + **Sequential Extraction**    
+
+```
     1. 1st extraction:   
         1. Add 24ml 0.5 M K2SO4 directly into the subsampled soil containing tubes   
             1. 1:3 soil weight/K2SO4 volume   
@@ -45,4 +50,4 @@ Adopted from
     3. 2nd extraction:   
         1. Extract aired pellets with 0.5M K2SO4   
             1. Repeat 1st extraction step a). through d).   
-
+```
