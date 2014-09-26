@@ -5,7 +5,7 @@ Adopted from
 
 1. 1st extraction:   
     1. Add 24ml 0.5 M K2SO4 directly into the subsampled soil containing tubes   
-        1. 1:3 soil weight/K2SO4 volume   
+        1. 1:3 soil weight/K<sub>2</sub>SO<sub>4</sub> volume   
     2. Place on shaker for 2 hours at 200 rpm at room temp (~23ºC)   
     3. Balance tubes and centrifuge at 4000 rpm for 20 min   
     4. Gravity filter the supernatant through K2SO4 leached filter papers   
@@ -27,10 +27,10 @@ Adopted from
         1. 1.5ml for 13g (Prakis & Hedin, 2001)   
         2. Use vortexer to make sure everything is mixed well   
             1. Or hand shake/flick to make sure the pellet and filter paper mix   
-    2. Keep the chloroform containing tubes in dark for 24 hours.   
+    2. Keep the chloroform containing tubes in dark for ~36 hours.   
         1. No shaking needed  
     3. Open the tube in the fume hood and let them air out for at least 17 hours (over night).    
-        1. Use vacuum pump to evacuate excess chloroform fume for 5X1min.   
+        1. Use vacuum pump to evacuate excess chloroform fume for 5 X 1min.   
 3. 2nd extraction:   
-    1. Extract aired pellets with 0.5M K2SO4   
+    1. Extract aired pellets with 0.5M K<sub>2</sub>SO<sub>4</sub>   
         1. Repeat 1st extraction step a). through d).   
