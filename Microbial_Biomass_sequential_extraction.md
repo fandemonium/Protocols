@@ -6,8 +6,8 @@ Adopted from
 + **Subsample peat (stored at +4ºC until all subsampled)**  
     1. One subsample for determining gravimetric soil moisture  
             a. \>15 g/sample in pre-weighted aluminum trays   
-                - the more sample the better   
-                - peat (especially fresh peat) contains ~90% of water   
+                    - the more sample the better   
+                    - peat (especially fresh peat) contains ~90% of water   
             b. Dried peat can be stored in co:in bags   
             c.Part of the dried peats can be used to determine soil pH (per location, per geography)   
     2. One subsample for sequential extraction   
