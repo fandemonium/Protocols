@@ -24,7 +24,12 @@
 
         Linker: `CC`
  
-        Forward primer: `GGACTACHVGGGTWTCTAAT`
+        Forward primer: 515F `GTGCCAGCMGCCGCGGTAA`
+        
+        Reverse primer: 806R `GGACTACHVGGGTWTCTAAT`
+
+        **Note:**  
+        The sequences (R1.fastq and R2.fastq) from ANL does not contain barcodes or primers! The tag information are stored in the index file (I1.fastq).   
 
     2. SeqFilters need tag file to be like this:   
         ```
@@ -40,7 +45,7 @@
             python ~/Documents/Fan/Smita/micro_code_23/MiSeq_rdptool_map_parser.py ANL_MAPPING_FILE.txt > TAG_FILE.tag
             ```
 
-        2. Then run SeqFilters   
+        2. Then run SeqFilters to parse the I1.fastq to bin seq id into individual sample directories.       
             ```
-            java -jar $SeqFilters --forward-primers GGACTACHVGGGTWTCTAAT --max-forward 2 --keep-primer true --seq-file test.fastq --min-length 200 --tag-file test.tag --outdir initial_process
+            java -jar $SeqFilters --seq-file *_I* --min-qual 0 --tag-file 16s_tag.txt --outdir initial_process_Index
             ```
