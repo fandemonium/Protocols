@@ -45,7 +45,15 @@
             python ~/Documents/Fan/Smita/micro_code_23/MiSeq_rdptool_map_parser.py ANL_MAPPING_FILE.txt > TAG_FILE.tag
             ```
 
-        2. Then run SeqFilters to parse the I1.fastq to bin seq id into individual sample directories.       
+        2. ANL sequences were sequenced from reverse primer end. The tag sequences need to be reverse compilmented (even though SeqFilter should automatically reverse compilment sequence if 16S genes are analyzed): 
             ```
-            java -jar $SeqFilters --seq-file *_I* --min-qual 0 --tag-file 16s_tag.txt --outdir initial_process_Index
+            python revcomp.py 16S_tag.txt > 16S_tag_rev.txt
             ```
+        
+        3. Then run SeqFilters to parse the I1.fastq to bin seq id into individual sample directories.       
+            ```
+            java -jar $SeqFilters --seq-file original/Undetermined_S0_L001_I1_001.fastq.gz --tag-file 16S_tag_rev.txt --outdir initial_process_Index_rev
+            ```
+
+            Note: to make sure tags were binning as expected, the quality of the tag could be set as 0 to begin with `--min-qual 0`   
+
