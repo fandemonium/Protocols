@@ -72,3 +72,8 @@ This protocol is specifically modified to use with Pat Schloss method of gene ta
 
             Note: to make sure tags were binning as expected, the quality of the tag could be set as 0 to begin with `--min-qual 0`   
 
+
+Qiime: demultiplexing
+```
+$ split_libraries_fastq.py -i ITS_assembled_o80.fastq.gz -b ITS_I1_fixed_assem_subset.fastq --rev_comp_mapping_barcodes -p 0 -o slout_q20 -m ~/Documents/ElizabethData/COBS_ITS/validate_mapping_file/hofmockel_its_mapping_corrected.txt --store_qual_scores
+```
