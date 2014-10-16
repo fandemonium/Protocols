@@ -72,6 +72,16 @@ This protocol is specifically modified to use with Pat Schloss method of gene ta
 
             Note: to make sure tags were binning as expected, the quality of the tag could be set as 0 to begin with `--min-qual 0`   
 
+Fixing index id:
+```
+python ~/Documents/Fan/code/fix_index_fastqgz_names.py ~/Documents/ElizabethData/COBS_ITS/uploads/Undetermined_S0_L001_I1_001.fastq.gz ITS_I1_fixed_id.fastq
+```
+
+Subset index file:
+```
+$ python ~/Documents/Fan/code/subset_I_for_pandaseq.py ITS_assembled_o80.fastq.gz ITS_I1_fixed_id.fastq ITS_I1_fixed_assem_subset.fastq
+```
+
 
 Qiime: demultiplexing
 ```
