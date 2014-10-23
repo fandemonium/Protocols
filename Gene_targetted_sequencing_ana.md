@@ -20,11 +20,19 @@ This protocol is specifically modified to use with Pat Schloss method of gene ta
         ~/RDP_Assembler/pandaseq/pandaseq -N -o 10 -e 25 -F -d rbfkms -f /PATH/TO/Undetermined_S0_L001_R1_001.fastq.gz -r /PATH/TO/Undetermined_S0_L001_R2_001.fastq.gz 1> IGSB140210-1_assembled.fastq 2> IGSB140210-1_assembled_stats.txt
         ```
 
-        You should look at the stat output. Pay close attention to sequences that are good in quality (Q > 27), large overlap (over 100) and short in assembled length (between 100 and 200). They are real sequence but not bacterial (e.g., some are parasidic worm genomes).  
-    
-    ```
-    ~/RDP_Assembler/pandaseq/pandaseq -N -o 40 -e 25 -F -d rbfkms -l 220 -L 280 -f Undetermined_S0_L001_R1_001.fastq.gz -r Undetermined_S0_L001_R2_001.fastq.gz 1> IGSB140210-1_assembled_o40.fastq 2> IGSB140210-1_assembled_stats_o40.txt
-    ```
+        You should look at the stat output. If you are analysing for 16S, pay close attention to sequences that are shorter than 250b and longer than 280b. Majority of sequences outside of the 250-280 range are eukaryotic. Some are bacterial but with high uncertainties. 
+
+    2. You could analyze your assembled read stat file by:
+        ```
+        python ~/Documents/Fan/code/rdp_assem_stat_parser.py IGSB140210-1_assembled_stats.txt
+        ```
+ 
+        You may need to modify the python script for different parameters.
+
+    3. Run assembler again with comfirmed parameters:
+        ```
+        ~/RDP_Assembler/pandaseq/pandaseq -N -o 22 -e 25 -F -d rbfkms -l 250 -L 280 -f /PATH/TO/Undetermined_S0_L001_R1_001.fastq.gz -r /PATH/TO/Undetermined_S0_L001_R2_001.fastq.gz 1> IGSB140210-1_assembled_250-280.fastq 2> IGSB140210-1_assembled_stats_250-280.txt
+        ```
     
     1. make sure the number of good assembled sequence in assembled.fastq is the same as the OK number in stats.txt file   
         ```
