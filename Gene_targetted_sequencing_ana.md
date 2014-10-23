@@ -7,13 +7,21 @@ This protocol is specifically modified to use with Pat Schloss method of gene ta
 + XXXX_R2_XXX.fastq.gz (reverse paired-end sequence, no tag nor linker/primer combo)
 
 *General Procedures:
-1. Use pandaseq to construct good quality full length sequences (assem.fastq)  
-2. Fix sequence names in I.fastq.gz to match assem.fastq (I_fixed.fastq)
-3. Subset I_fixed.fastq to the same sequences as assem.fastq
-4. Use qiime: split_library_fastq.py to parse sequences to individual samples (minimize quality trim at this step)
-5. 
+1. Use RDP's pandaseq (RDP_Assembler) to construct good quality full length sequences (assem.fastq).   
+2. Use RDPTools/SeqFilters to check barcodes quality and split them into different sample directories (ONLY barcodes need to be reverse complimented, sequences are in the correct orientation).   
+3. Bin assembled sequences into different sample files.   
+4. Check for chimeras.  
+5. Use RDPTools/Classifiers to pick taxonomy, use RDPToools/AlignmentTools to align sequences and then cluster using RDPTools/mcCluster.   
+6. R for analysis
 
 1. RDP_assembler  
+    1. First run with minimal constrants:
+        ```
+        ~/RDP_Assembler/pandaseq/pandaseq -N -o 10 -e 25 -F -d rbfkms -f /PATH/TO/Undetermined_S0_L001_R1_001.fastq.gz -r /PATH/TO/Undetermined_S0_L001_R2_001.fastq.gz 1> IGSB140210-1_assembled.fastq 2> IGSB140210-1_assembled_stats.txt
+        ```
+
+        You should look at the stat output. Pay close attention to sequences that are good in quality (Q > 27), large overlap (over 100) and short in assembled length (between 100 and 200). They are real sequence but not bacterial (e.g., some are parasidic worm genomes).  
+    
     ```
     ~/RDP_Assembler/pandaseq/pandaseq -N -o 40 -e 25 -F -d rbfkms -l 220 -L 280 -f Undetermined_S0_L001_R1_001.fastq.gz -r Undetermined_S0_L001_R2_001.fastq.gz 1> IGSB140210-1_assembled_o40.fastq 2> IGSB140210-1_assembled_stats_o40.txt
     ```
