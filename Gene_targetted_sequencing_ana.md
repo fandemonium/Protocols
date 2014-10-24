@@ -6,7 +6,8 @@ This protocol is specifically modified to use with Pat Schloss method of gene ta
 + XXXX_R1_XXX.fastq.gz (forward paired-end sequence, no tag nor linker/primer combo)    
 + XXXX_R2_XXX.fastq.gz (reverse paired-end sequence, no tag nor linker/primer combo)    
 
-*General Procedures:    
+General Procedures:   
+------------------
 1. Use RDP's pandaseq (RDP_Assembler) to construct good quality full length sequences (assem.fastq).   
 2. Use RDPTools/SeqFilters to check barcodes quality and split them into different sample directories (ONLY barcodes need to be reverse complimented, sequences are in the correct orientation).   
 3. Bin assembled sequences into different sample files.   
@@ -14,9 +15,10 @@ This protocol is specifically modified to use with Pat Schloss method of gene ta
 5. Use RDPTools/Classifiers to pick taxonomy, use RDPToools/AlignmentTools to align sequences and then cluster using RDPTools/mcCluster.   
 6. R for analysis
 
-*Detailed Procedures:   
+Detailed Procedures:   
+-------------------
 1. **RDP_assembler**  
-    1. First run with minimal constrants:
+    1. First run with minimal constrants:i   
         ```
         ~/RDP_Assembler/pandaseq/pandaseq -N -o 10 -e 25 -F -d rbfkms -f /PATH/TO/Undetermined_S0_L001_R1_001.fastq.gz -r /PATH/TO/Undetermined_S0_L001_R2_001.fastq.gz 1> IGSB140210-1_assembled.fastq 2> IGSB140210-1_assembled_stats.txt
         ```
