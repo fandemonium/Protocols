@@ -33,11 +33,12 @@ This protocol is specifically modified to use with Pat Schloss method of gene ta
         ```
         ~/RDP_Assembler/pandaseq/pandaseq -N -o 22 -e 25 -F -d rbfkms -l 250 -L 280 -f /PATH/TO/Undetermined_S0_L001_R1_001.fastq.gz -r /PATH/TO/Undetermined_S0_L001_R2_001.fastq.gz 1> IGSB140210-1_assembled_250-280.fastq 2> IGSB140210-1_assembled_stats_250-280.txt
         ```
-    
-    1. make sure the number of good assembled sequence in assembled.fastq is the same as the OK number in stats.txt file   
+
+    4. make sure the number of good assembled sequence in assembled.fastq is the same as the OK number in stats.txt file   
         ```
-        grep -c "@M0" IGSB140210-1_assembled_o40.fastq  
+        grep -c "@M0" IGSB140210-1_assembled_250-280.fastq  
         ```
+
 2. RDPTools: SeqFilters   
     This step trims off the tag and linker sequences. Final files are splited into folders named by individual samples.    
     Need:   
@@ -88,18 +89,32 @@ This protocol is specifically modified to use with Pat Schloss method of gene ta
 
             Note: to make sure tags were binning as expected, the quality of the tag could be set as 0 to begin with `--min-qual 0`   
 
-Fixing index id:
-```
-python ~/Documents/Fan/code/fix_index_fastqgz_names.py ~/Documents/ElizabethData/COBS_ITS/uploads/Undetermined_S0_L001_I1_001.fastq.gz ITS_I1_fixed_id.fastq
-```
+3. Chimera check using Usearch with RDP training set as a reference database   
+    1. Why choose Usearch over other?
+        See [here](https://rdp.cme.msu.edu/tutorials/workflows/16S_supervised_flow.html)
 
-Subset index file:
-```
-$ python ~/Documents/Fan/code/subset_I_for_pandaseq.py ITS_assembled_o80.fastq.gz ITS_I1_fixed_id.fastq ITS_I1_fixed_assem_subset.fastq
-```
+    2. Why use RDP training set instead of greengene or silva?
+        See [here](http://www.drive5.com/usearch/manual/uchime_ref.html)
+
+    3. Check [here](http://drive5.com/usearch/) for new version of Usearch. Check [here](http://sourceforge.net/projects/rdp-classifier/files/RDP_Classifier_TrainingData/) for new version of RDP training sets. 
+
+    4. Check for chimeras on each binned fasta file:
+        ```
+        for i in *_assem.fasta; do ~/usearch70 -uchime_ref $i -db ~/Documents/Databases/RDPClassifier_16S_trainsetNo10_rawtrainingdata/trainset10_082014_rmdup.fasta -uchimeout $i.uchime -strand plus -selfid -mindiv 1.5 -mindiffs 5 -chimeras "$i"_chimera.fasta -nonchimeras "$i"_good.fasta; done
+        ```
+    
+        1. Why not check chimeras on the assembled paired-end file?
+            Free Usearch is 32-bit. The big assembled file will cause Usearch to crash for out of memory. 
+
+        2. -mindiv, -mindiffs
+            These parameters are adapted from the old [Uchime](http://www.drive5.com/usearch/manual/UCHIME_score.html). 
+
+        3. The number of chimera sequences and good sequences don't add up?    
+            Check your XXX.uchime output. Use:
+            ```
+            grep -cw "?" XXX.uchime
+            ```
+          
+            The number of chimera, good sequence, and "?" should add up. "?" are sequences that Usearch couldn't classify it as either chimera or good sequence. This usually happens with default parameter. But it shouldn't be happening with `-mindiv 1.5 -mindiffs 5`. 
 
 
-Qiime: demultiplexing
-```
-$ split_libraries_fastq.py -i ITS_assembled_o80.fastq.gz -b ITS_I1_fixed_assem_subset.fastq --rev_comp_mapping_barcodes -p 0 -o slout_q20 -m ~/Documents/ElizabethData/COBS_ITS/validate_mapping_file/hofmockel_its_mapping_corrected.txt --store_qual_scores
-```
