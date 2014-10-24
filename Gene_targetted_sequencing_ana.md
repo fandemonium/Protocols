@@ -118,11 +118,14 @@ Detailed Procedures:
             These parameters are adapted from the old [Uchime](http://www.drive5.com/usearch/manual/UCHIME_score.html). 
 
         3. The number of chimera sequences and good sequences don't add up?    
-            Check your XXX.uchime output. Use:
+            Check your XXX.uchime output. Use:    
             ```
             grep -cw "?" XXX.uchime
             ```
           
             The number of chimera, good sequence, and "?" should add up. "?" are sequences that Usearch couldn't classify it as either chimera or good sequence. This usually happens with default parameter. But it shouldn't be happening with `-mindiv 1.5 -mindiffs 5`. 
 
-
+        4. To check if all files chimera number and good sequence number summs up, do:   
+            ```
+            python ~/Documents/Fan/code/check_chimera_numbers.py good_reads/number_good_reads.txt chimeras/number_chimera.txt ../binned_assem/number_16S_assem.txt 
+            ```
