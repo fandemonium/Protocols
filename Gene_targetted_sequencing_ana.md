@@ -60,12 +60,16 @@ Detailed Procedures:
 
         Linker: `CC`
  
-        Forward primer: 515F `GTGCCAGCMGCCGCGGTAA`
+        16S V4 Forward primer: 515F `GTGCCAGCMGCCGCGGTAA`
         
-        Reverse primer: 806R `GGACTACHVGGGTWTCTAAT`
+        16S V4 Reverse primer: 806R `GGACTACHVGGGTWTCTAAT`
 
         **Note:**  
-        The sequences (R1.fastq and R2.fastq) from ANL does not contain barcodes or primers! The tag information are stored in the index file (I1.fastq).   
+        1. The sequences (R1.fastq and R2.fastq) from ANL does not contain barcodes or primers! The tag information are stored in the index file (I1.fastq).   
+        2. If the mapping file was generated or edited in excel, unwanted invisible characters would be present (you can visualize them in by using `less` or `vi`). To get rid of the characters and make the file recognizable by python, do:
+            ```
+            ~/Documents/Fan/code/mac2unix.pl MAPPING_FILE.txt > fixed_mapping_file.txt
+            ```
 
     2. SeqFilters need tag file to be like this:   
         ```
