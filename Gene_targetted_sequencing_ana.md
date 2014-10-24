@@ -1,12 +1,12 @@
 Gene-Targetted Sequence Analysis
 ====================
 
-This protocol is specifically modified to use with Pat Schloss method of gene targetting sequencing results from which 3 fastq.gz files were yielded:
-+ XXXX_I1_XXX.fastq.gz (index file that stores barcodes)
-+ XXXX_R1_XXX.fastq.gz (forward paired-end sequence, no tag nor linker/primer combo)
-+ XXXX_R2_XXX.fastq.gz (reverse paired-end sequence, no tag nor linker/primer combo)
+This protocol is specifically modified to use with Pat Schloss method of gene targetting sequencing results from which 3 fastq.gz files were yielded:    
++ XXXX_I1_XXX.fastq.gz (index file that stores barcodes)    
++ XXXX_R1_XXX.fastq.gz (forward paired-end sequence, no tag nor linker/primer combo)    
++ XXXX_R2_XXX.fastq.gz (reverse paired-end sequence, no tag nor linker/primer combo)    
 
-*General Procedures:
+*General Procedures:    
 1. Use RDP's pandaseq (RDP_Assembler) to construct good quality full length sequences (assem.fastq).   
 2. Use RDPTools/SeqFilters to check barcodes quality and split them into different sample directories (ONLY barcodes need to be reverse complimented, sequences are in the correct orientation).   
 3. Bin assembled sequences into different sample files.   
@@ -14,7 +14,8 @@ This protocol is specifically modified to use with Pat Schloss method of gene ta
 5. Use RDPTools/Classifiers to pick taxonomy, use RDPToools/AlignmentTools to align sequences and then cluster using RDPTools/mcCluster.   
 6. R for analysis
 
-1. RDP_assembler  
+*Detailed Procedures:   
+1. **RDP_assembler**  
     1. First run with minimal constrants:
         ```
         ~/RDP_Assembler/pandaseq/pandaseq -N -o 10 -e 25 -F -d rbfkms -f /PATH/TO/Undetermined_S0_L001_R1_001.fastq.gz -r /PATH/TO/Undetermined_S0_L001_R2_001.fastq.gz 1> IGSB140210-1_assembled.fastq 2> IGSB140210-1_assembled_stats.txt
@@ -39,9 +40,10 @@ This protocol is specifically modified to use with Pat Schloss method of gene ta
         grep -c "@M0" IGSB140210-1_assembled_250-280.fastq  
         ```
 
-2. RDPTools: SeqFilters   
+2. **RDPTools: SeqFilters**   
     This step trims off the tag and linker sequences. Final files are splited into folders named by individual samples.    
-    Need:   
+    
+    **Need:**   
     1. map file from Argonne
         ```
         #SampleID       BarcodeSequence LinkerPrimerSequence    Description
@@ -89,24 +91,24 @@ This protocol is specifically modified to use with Pat Schloss method of gene ta
 
             Note: to make sure tags were binning as expected, the quality of the tag could be set as 0 to begin with `--min-qual 0`   
 
-3. Chimera check using Usearch with RDP training set as a reference database   
-    1. Why choose Usearch over other?
+3. **Chimera check using Usearch with RDP training set as a reference database**       
+    1. Why choose Usearch over other?    
         See [here](https://rdp.cme.msu.edu/tutorials/workflows/16S_supervised_flow.html)
 
-    2. Why use RDP training set instead of greengene or silva?
+    2. Why use RDP training set instead of greengene or silva?   
         See [here](http://www.drive5.com/usearch/manual/uchime_ref.html)
 
-    3. Check [here](http://drive5.com/usearch/) for new version of Usearch. Check [here](http://sourceforge.net/projects/rdp-classifier/files/RDP_Classifier_TrainingData/) for new version of RDP training sets. 
+    3. Check [here](http://drive5.com/usearch/) for new version of Usearch. Check [here](http://sourceforge.net/projects/rdp-classifier/files/RDP_Classifier_TrainingData/) for new version of RDP training sets.     
 
-    4. Check for chimeras on each binned fasta file:
+    4. Check for chimeras on each binned fasta file:   
         ```
         for i in *_assem.fasta; do ~/usearch70 -uchime_ref $i -db ~/Documents/Databases/RDPClassifier_16S_trainsetNo10_rawtrainingdata/trainset10_082014_rmdup.fasta -uchimeout $i.uchime -strand plus -selfid -mindiv 1.5 -mindiffs 5 -chimeras "$i"_chimera.fasta -nonchimeras "$i"_good.fasta; done
         ```
     
-        1. Why not check chimeras on the assembled paired-end file?
+        1. Why not check chimeras on the assembled paired-end file?    
             Free Usearch is 32-bit. The big assembled file will cause Usearch to crash for out of memory. 
 
-        2. -mindiv, -mindiffs
+        2. -mindiv, -mindiffs    
             These parameters are adapted from the old [Uchime](http://www.drive5.com/usearch/manual/UCHIME_score.html). 
 
         3. The number of chimera sequences and good sequences don't add up?    
