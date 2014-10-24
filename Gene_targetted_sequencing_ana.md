@@ -58,11 +58,13 @@ Detailed Procedures:
 
         Tags example: `TCCCTTGTCTCC`   
 
-        Linker: `CC`
- 
         16S V4 Forward primer: 515F `GTGCCAGCMGCCGCGGTAA`
         
         16S V4 Reverse primer: 806R `GGACTACHVGGGTWTCTAAT`
+
+        ITS 1/2 Forward primer: ITS1f `CTTGGTCATTTAGAGGAAGTAA`
+
+        ITS 1/2 Reverse primer: ITS2 `GCTGCGTTCTTCATCGATGC`
 
         **Note:**  
         1. The sequences (R1.fastq and R2.fastq) from ANL does not contain barcodes or primers! The tag information are stored in the index file (I1.fastq).   
@@ -82,12 +84,12 @@ Detailed Procedures:
 
         1. You can parse the Argonne file into above format:
             ```
-            python ~/Documents/Fan/Smita/micro_code_23/MiSeq_rdptool_map_parser.py ANL_MAPPING_FILE.txt > TAG_FILE.tag
+            python ~/Documents/Fan/code/MiSeq_rdptool_map_parser.py ANL_MAPPING_FILE.txt > TAG_FILE.tag
             ```
 
-        2. ANL sequences were sequenced from reverse primer end. The tag sequences need to be reverse compilmented (even though SeqFilter should automatically reverse compilment sequence if 16S genes are analyzed): 
+        2. ANL tag sequences need to be reverse compilmented. It's much easier to reverse compliment the parsed tag file than the index file (XXX_I1.fastq) 
             ```
-            python revcomp.py 16S_tag.txt > 16S_tag_rev.txt
+            python ~/Documents/Fan/code/revcomp_rdp_format.py 16S_tag.txt > 16S_tag_rev.txt
             ```
         
         3. Then run SeqFilters to parse the I1.fastq to bin seq id into individual sample directories.       
@@ -112,7 +114,7 @@ Detailed Procedures:
         ```
     
         1. Why not check chimeras on the assembled paired-end file?    
-            Free Usearch is 32-bit. The big assembled file will cause Usearch to crash for out of memory. 
+            Free Usearch is 32-bit. The big assembled file will cause Usearch to crash for out of memory. The NoTag.fasta may be too large for Usearch as well. Don't be surprised if there is nothing in NoTag uchime outputs. Since, the NoTag files is only used early on to quantify sequence outputs, I usually don't brother to process it any more at this step. 
 
         2. -mindiv, -mindiffs    
             These parameters are adapted from the old [Uchime](http://www.drive5.com/usearch/manual/UCHIME_score.html). 
@@ -123,7 +125,7 @@ Detailed Procedures:
             grep -cw "?" XXX.uchime
             ```
           
-            The number of chimera, good sequence, and "?" should add up. "?" are sequences that Usearch couldn't classify it as either chimera or good sequence. This usually happens with default parameter. But it shouldn't be happening with `-mindiv 1.5 -mindiffs 5`. 
+            **Note:** The number of chimera, good sequence, and "?" should add up. "?" are sequences that Usearch couldn't classify it as either chimera or good sequence. This usually happens with default parameter. But it shouldn't be happening with `-mindiv 1.5 -mindiffs 5`. 
 
         4. To check if all files chimera number and good sequence number summs up, do:   
             ```
