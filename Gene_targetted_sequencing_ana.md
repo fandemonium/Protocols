@@ -23,7 +23,7 @@ Detailed Procedures:
         ~/RDP_Assembler/pandaseq/pandaseq -N -o 10 -e 25 -F -d rbfkms -f /PATH/TO/Undetermined_S0_L001_R1_001.fastq.gz -r /PATH/TO/Undetermined_S0_L001_R2_001.fastq.gz 1> IGSB140210-1_assembled.fastq 2> IGSB140210-1_assembled_stats.txt
         ```
 
-        You should look at the stat output. If you are analysing for 16S, pay close attention to sequences that are shorter than 250b and longer than 280b. Majority of sequences outside of the 250-280 range are eukaryotic. Some are bacterial but with high uncertainties. 
+        You should look at the stat output. If you are analysing for 16S, pay close attention to sequences that are shorter than 250b and longer than 280b. Majority of sequences outside of the 250-280 range are eukaryotic. Some are bacterial but with high uncertainties.Same case with ITS. If you blast anything less 250 or greater than 280, you can see that anything with a good match and high sequence coverage lands within 250-280 range. Anything longer than 280 has an extremely suspecious trunk of unknow match int he middle. Unlike 16S, ITS1F/ITS2 is known to amplify a substantial amount of plant genes. If it's a chimera between fungi and plant, reference based uchime would not be able to eliminate it. I also found that the combination of quality scores and seq length matters more than overlaps.  
 
     2. You could analyze your assembled read stat file by:
         ```
@@ -34,8 +34,13 @@ Detailed Procedures:
 
     3. Run assembler again with comfirmed parameters:
         ```
-        ~/RDP_Assembler/pandaseq/pandaseq -N -o 22 -e 25 -F -d rbfkms -l 250 -L 280 -f /PATH/TO/Undetermined_S0_L001_R1_001.fastq.gz -r /PATH/TO/Undetermined_S0_L001_R2_001.fastq.gz 1> IGSB140210-1_assembled_250-280.fastq 2> IGSB140210-1_assembled_stats_250-280.txt
+        ~/RDP_Assembler/pandaseq/pandaseq -N -o 10 -e 25 -F -d rbfkms -l 250 -L 280 -f /PATH/TO/Undetermined_S0_L001_R1_001.fastq.gz -r /PATH/TO/Undetermined_S0_L001_R2_001.fastq.gz 1> IGSB140210-1_assembled_250-280.fastq 2> IGSB140210-1_assembled_stats_250-280.txt
         ```
+
+        For ITS.
+        ```
+        ~/RDP_Assembler/pandaseq/pandaseq -N -o 80 -e 25 -F -d rbfkms -l 122 -f ~/Documents/ElizabethData/COBS_ITS/uploads/Undetermined_S0_L001_R1_001.fastq.gz -r ~/Documents/ElizabethData/COBS_ITS/uploads/Undetermined_S0_L001_R2_001.fastq.gz 1> ITS_assembled_o80_min122.fastq 2> ITS_assembled_o80_min122_stats.txt
+        ``` 
 
     4. make sure the number of good assembled sequence in assembled.fastq is the same as the OK number in stats.txt file   
         ```
@@ -112,7 +117,11 @@ Detailed Procedures:
         ```
         for i in *_assem.fasta; do ~/usearch70 -uchime_ref $i -db ~/Documents/Databases/RDPClassifier_16S_trainsetNo10_rawtrainingdata/trainset10_082014_rmdup.fasta -uchimeout $i.uchime -strand plus -selfid -mindiv 1.5 -mindiffs 5 -chimeras "$i"_chimera.fasta -nonchimeras "$i"_good.fasta; done
         ```
-    
+        
+        ```
+        for i in *_assem.fasta; do ~/usearch70 -uchime_ref $i -db ~/Documents/Databases/fungalits_warcup_trainingdata1/Warcup.fungalITS.fasta -uchimeout $i.uchime -strand plus -selfid -mindiv 1.5 -mindiffs 5 -chimeras "$i"_chimera.fasta -nonchimeras "$i"_good.fasta; done
+        ```
+ 
         1. Why not check chimeras on the assembled paired-end file?    
             Free Usearch is 32-bit. The big assembled file will cause Usearch to crash for out of memory. The NoTag.fasta may be too large for Usearch as well. Don't be surprised if there is nothing in NoTag uchime outputs. Since, the NoTag files is only used early on to quantify sequence outputs, I usually don't brother to process it any more at this step. 
 
