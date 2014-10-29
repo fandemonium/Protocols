@@ -37,7 +37,7 @@ Detailed Procedures:
         ~/RDP_Assembler/pandaseq/pandaseq -N -o 10 -e 25 -F -d rbfkms -l 250 -L 280 -f /PATH/TO/Undetermined_S0_L001_R1_001.fastq.gz -r /PATH/TO/Undetermined_S0_L001_R2_001.fastq.gz 1> IGSB140210-1_assembled_250-280.fastq 2> IGSB140210-1_assembled_stats_250-280.txt
         ```
 
-        For ITS.
+        For ITS, I used minimal overlap of 80 and minimal merged length of 122. The large variations in fungal ITS regions requires a larger range to cover the broad taxonomy distribution.
         ```
         ~/RDP_Assembler/pandaseq/pandaseq -N -o 80 -e 25 -F -d rbfkms -l 122 -f ~/Documents/ElizabethData/COBS_ITS/uploads/Undetermined_S0_L001_R1_001.fastq.gz -r ~/Documents/ElizabethData/COBS_ITS/uploads/Undetermined_S0_L001_R2_001.fastq.gz 1> ITS_assembled_o80_min122.fastq 2> ITS_assembled_o80_min122_stats.txt
         ``` 
@@ -104,22 +104,61 @@ Detailed Procedures:
 
             Note: to make sure tags were binning as expected, the quality of the tag could be set as 0 to begin with `--min-qual 0`   
 
-3. **Chimera check using Usearch with RDP training set as a reference database**       
+
+3. Optional: determine sequence per base stats using usearch:    
+        ```
+        for i in *.fastq; do ~/usearch70 -fastq_stats $i -log "$i"_stats.log; done
+        ```
+
+3. **Chimera removal**       
     1. Why choose Usearch over other?    
         See [here](https://rdp.cme.msu.edu/tutorials/workflows/16S_supervised_flow.html)
 
-    2. Why use RDP training set instead of greengene or silva?   
+    2. For reference mode, why use RDP training sets instead of greengene or silva?   
         See [here](http://www.drive5.com/usearch/manual/uchime_ref.html)
 
     3. Check [here](http://drive5.com/usearch/) for new version of Usearch. Check [here](http://sourceforge.net/projects/rdp-classifier/files/RDP_Classifier_TrainingData/) for new version of RDP training sets.     
 
-    4. Check for chimeras on each binned fasta file:   
+    4. Chimera removal:
+        1. Check for chimeras de novo first:
+            1. Why?   
+                Any chimera generated from unknown organisms that are not in databases would not be eliminated via reference mode.   
+  
+            2. Use usearch/uparse to quality filter the binned pair-ended (full-coverage) fastq files. For filter parameter and trimming variations and details, see [here](http://drive5.com/usearch/manual/fastq_choose_filter.html)
+                ```
+                for i in *.fastq; do ~/usearch70 -fastq_filter $i -fastq_maxee 0.5 -fastaout ../../uparsed/quality_filtered/"$i"_maxee_0.5.fasta; done
+                ```
+
+            3. Dereplicate reads, determine cluster sizes:
+                ```
+                for i in *_0.5.fasta; do ~/usearch70 -derep_fulllength $i -output ../derep/"$i"_unique.fasta -sizeout; done
+                ```
+
+                *Note:* you could use `-minsize 2` to get rid of singletons at this step. But you still need to sort clusters by size. Might as well get rid of singletons during next step. 
+
+
+            4. Sort by size to remove singletons:
+                ```
+                for i in *_unique.fasta; do ~/usearch70 -sortbysize $i -output ../sorted/"$i"_sorted.fa -minsize 2; done
+                ```
+
+            4. Use cluster_otus to get rid of chimeras. So I don't like to cluster before I can confirm all of the chimeras are removed... so i clustered my ITS at 0. Also, don't use `-otus`.  
+                ```
+                for i in *_unique.fasta; do ~/usearch70 -cluster_otus $i -fastaout ../chimera_headers/"$i"_all_header.fasta; done
+                ```
+
+            5. get rid of chimera clusters
+                ```
+                for i in *_header.fasta; do python ~/Documents/Fan/code/usearch_denovo_chim_remover.py $i ../chimera_removed/"$i"_good.fa; done
+                ```
+
+    4. Check for chimeras on each binned fasta file with reference dataset:   
         ```
         for i in *_assem.fasta; do ~/usearch70 -uchime_ref $i -db ~/Documents/Databases/RDPClassifier_16S_trainsetNo10_rawtrainingdata/trainset10_082014_rmdup.fasta -uchimeout $i.uchime -strand plus -selfid -mindiv 1.5 -mindiffs 5 -chimeras "$i"_chimera.fasta -nonchimeras "$i"_good.fasta; done
         ```
         
         ```
-        for i in *_assem.fasta; do ~/usearch70 -uchime_ref $i -db ~/Documents/Databases/fungalits_warcup_trainingdata1/Warcup.fungalITS.fasta -uchimeout $i.uchime -strand plus -selfid -mindiv 1.5 -mindiffs 5 -chimeras "$i"_chimera.fasta -nonchimeras "$i"_good.fasta; done
+        for i in *_assem.fasta; do ~/usearch71 -uchime_ref $i -db ~/Documents/Databases/fungalits_warcup_trainingdata1/Warcup.fungalITS.fasta -uchimeout $i.uchime -strand plus -selfid -mindiv 1.5 -mindiffs 5 -chimeras "$i"_chimera.fasta -nonchimeras "$i"_good.fasta; done
         ```
  
         1. Why not check chimeras on the assembled paired-end file?    
