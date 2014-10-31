@@ -158,7 +158,7 @@ Detailed Procedures:
         ```
         
         ```
-        for i in *_assem.fasta; do ~/usearch71 -uchime_ref $i -db ~/Documents/Databases/fungalits_warcup_trainingdata1/Warcup.fungalITS.fasta -uchimeout $i.uchime -strand plus -selfid -mindiv 1.5 -mindiffs 5 -chimeras "$i"_chimera.fasta -nonchimeras "$i"_good.fasta; done
+        for i in *_good.fa; do ~/usearch70 -uchime_ref $i -db ~/Documents/Databases/fungalits_warcup_trainingdata1/Warcup.fungalITS.fasta -uchimeout ../uchime_ref/stats/$i.uchime -strand plus -selfid -mindiv 1.5 -mindiffs 5 -chimeras ../uchime_ref/chimeras/"$i"_chimera.fa -nonchimeras ../uchime_ref/good/"$i"_ref_good.fa; done
         ```
  
         1. Why not check chimeras on the assembled paired-end file?    
@@ -179,3 +179,20 @@ Detailed Procedures:
             ```
             python ~/Documents/Fan/code/check_chimera_numbers.py good_reads/number_good_reads.txt chimeras/number_chimera.txt ../binned_assem/number_16S_assem.txt 
             ```
+
+1. RDP unsupervised analysis: Classifier. group samples into their own groups, ie. cobs for cobs, spruce for spruce.
+    ```
+    java -Xmx4g -jar ~/RDPTools/classifier.jar classify -g fungalits_warcup -c 0.5 -f fixrank -o Spruce_2013_ITS_classified_0.5.txt -h Spruce_2013_ITS_hier.txt *.fa
+    ```
+
+
+Mapping back:
+```
+for i in *_0.5.fasta; do ~/usearch70 -usearch_global $i -db ../6_consolidate_otus/all_otus.fa -strand plus -id 0.97 -uc ../7_map_uc/"$i"_map.uc; done
+```
+
+Add sample name to map.uc
+```
+for i in *.uc; do python ~/Documents/Fan/code/usearch_map_uc_parser.py $i > ../map_uc_sample/"$i".sample; done
+```
+When mapping map.uc back to the sequence, I think the singletons are also included when mapping. considering the whole point of removing singletons because they are errorness. Should get rid of the singletons from the very beginning?
