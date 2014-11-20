@@ -144,7 +144,7 @@ Detailed Procedures:
 
             4. Use cluster_otus to get rid of chimeras. So I don't like to cluster before I can confirm all of the chimeras are removed... so i clustered my ITS at 0. Also, don't use `-otus`.  
                 ```
-                for i in *_unique.fasta; do ~/usearch70 -cluster_otus $i -fastaout ../chimera_headers/"$i"_all_header.fasta; done
+                for i in *.fa; do ~/usearch70 -cluster_otus $i -otuid 0.985 -fastaout ../4_cluster_otus_0.985/all_headers/"$i"_all_headers.fa -otus ../4_cluster_otus_0.985/otus/"$i"_otus.fa; done                
                 ```
 
             5. get rid of chimera clusters
@@ -154,7 +154,7 @@ Detailed Procedures:
 
     4. Check for chimeras on each binned fasta file with reference dataset:   
         ```
-        for i in *_assem.fasta; do ~/usearch70 -uchime_ref $i -db ~/Documents/Databases/RDPClassifier_16S_trainsetNo10_rawtrainingdata/trainset10_082014_rmdup.fasta -uchimeout $i.uchime -strand plus -selfid -mindiv 1.5 -mindiffs 5 -chimeras "$i"_chimera.fasta -nonchimeras "$i"_good.fasta; done
+        for i in *_otus1.fa; do ~/usearch70 -uchime_ref $i -db ~/Documents/Databases/RDPClassifier_16S_trainsetNo10_rawtrainingdata/trainset10_082014_rmdup.fasta -uchimeout ../../5_uchime_ref/stats/"$i".uchime -strand plus -selfid -mindiv 1.5 -mindiffs 5 -chimeras ../../5_uchime_ref/chimeras/"$i"_chimera.fa -nonchimeras ../../5_uchime_ref/good_otus/"$i"_good.fa; done
         ```
         
         ```
@@ -204,3 +204,14 @@ For 16S:
 ```
 ~/usearch70 -usearch_global ../../16s_test.fasta -db uparse_test_otu_clust_0.97_otusn.fasta -strand plus -id 0.97 -matched 16s_test_matched.fa -uc 16s_test_readmap.uc
 ```
+
+java -Xmx4g -jar /Users/metagenomics/RDPTools/Clustering.jar derep --unaligned -o /Users/metagenomics/Documents/2013_ITS_fy/uparsed/6_consolidate_otus/rdp_derep/all_seqs_derep.fasta /Users/metagenomics/Documents/2013_ITS_fy/uparsed/6_consolidate_otus/rdp_derep/all_seqs.ids /Users/metagenomics/Documents/2013_ITS_fy/uparsed/6_consolidate_otus/rdp_derep/all_seqs.samples /Users/metagenomics/Documents/2013_ITS_fy/uparsed/6_consolidate_otus/all_maxee_0.5.fa
+
+
+increase the break number to avoid new false chimeras
+~/usearch70 -cluster_otus cat_otu_good_derep_sorted.fa -otuid 0.985 -uparse_break -100.0 -otus all_otus1.fa -fastaout all_header_otus1.fa
+
+for i in *.fasta; do ~/usearch70 -usearch_global $i -db ../6_consolidate_otus/all_otusn.fa -strand plus -id 0.985 -uc ../7_map_uc/map_uc/"$"_map.uc; done
+
+16S:
+for i in *.fasta; do ~/usearch70 -usearch_global $i -db ../5_uchime_ref/good_otus_renamed/"$i"_unique.fasta_sorted.fa_otus1.fa_good.fa_otus.fa -strand plus -id 0.985 -uc ../6_map_reads/uc/"$i"_map.uc -matched ../6_map_reads/seqs/"$i"_matched.fa; done
