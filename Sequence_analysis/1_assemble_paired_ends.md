@@ -19,9 +19,7 @@ Detailed procedures:
     2. Detailed assemblage stats are at the end of the file   
     3. The stat table headers starting from the 4th columns are:    
 
-        | Seq | Seq | Min | Errorsum | Read | Bestoverlap | NATS | Overlap |   
-        | ID | length | assembled | /length | Qscore | length | overlap | start |    
-        |  |      | Qscore   |       | (avg) |      | goodness | position |   
+        | Seq ID | Seq length | Min Assembled Qscore | Errorsum / Length | Read Qscore (avg) | Bestoverlap Length | NATS (overlap goodness) | Overlap Start Position |   
         | ----- |:---:|:---:|:---:|:---:|:---:|:---:|:---:|    
         |MISEQ08:58:000000000-A6BH3:1:1101:17335:1742:AACAGGTTCGC | 299 | 27 | 0.0001785 | 37 |197 | 392.4 | 54|    
 
