@@ -36,7 +36,7 @@ Detailed procedures:
 
         **Note:**  
         1. The raw sequences (R1.fastq and R2.fastq) from ANL does not contain barcodes or primers! The tag information are stored in the index file (I1.fastq).   
-        2. If the mapping file was generated or edited in excel, unwanted invisible characters would be present (you can visualize them in by using `less` or `vi`). To get rid of the characters and make the file recognizable by python, do:
+        2. If the mapping file was generated or edited in excel, unwanted invisible characters would be present (you can visualize them in by using `less` or `vi`). To get rid of the characters and make the file recognizable by python, do:    
             ```
             ~/Documents/Fan/code/mac2unix.pl /PATH/TO/MY/MAPPING_FILE.txt > /PATH/TO/MY/fixed_mapping_file.txt
             ```
