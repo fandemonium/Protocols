@@ -18,6 +18,7 @@ Detailed procedures:
     1. Assemblage input paramenters are at the beginning of the file   
     2. Detailed assemblage stats are at the end of the file   
     3. The stat table headers starting from the 4th columns are:    
+
         | seqID | seq length | min_assembled_Qscore | errorsum/len | read Q score (avg) | bestoverlap length | nats (overlap goodness: great if it's ~2X overlap length) | overlap_start_position |   
         | ----- |:---:|:---:|:---:|:---:|:---:|:---:|:---:|    
         |MISEQ08:58:000000000-A6BH3:1:1101:17335:1742:AACAGGTTCGC | 299 | 27 | 0.0001785 | 37 |197 | 392.4 | 54|    
