@@ -70,4 +70,15 @@ Detailed procedures:
             2. Binning with the quality of the tag set as 0: `--min-qual 0`  
             3. The number of barcodes binned should add up to what's in the test file.   
 
+    3. Use quality trimmed tag files to query assembled pair-ended sequences:   
+        1. first, move *_trimmed.fasta from inidividual folders in result_dir to a new directory. I create a directory in `initial_process_Index`. In directory `initial_process_Index`   
+            ```
+            mkdir trimmed_tags
+            mv result_dir/*/*_trimmed.fasta trimmed_tags/
+            mv NoTag_trimmed.fasta ../result_dir/NoTag/  ##move notag file back.
+            ```
 
+        2. Now, binning. In direcotry `trimmed_tags`
+            ```
+            python ~/Documents/Fan/code/bin_reads.py ../../paired_end_assembled/assembled_reads_250-280.fastq
+            ```
