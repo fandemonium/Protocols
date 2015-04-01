@@ -175,9 +175,12 @@ Detailed Procedures:
           
             **Note:** The number of chimera, good sequence, and "?" should add up. "?" are sequences that Usearch couldn't classify it as either chimera or good sequence. This usually happens with default parameter. But it shouldn't be happening with `-mindiv 1.5 -mindiffs 5`. 
 
-        4. To check if all files chimera number and good sequence number summs up, do:   
+        4. To check if all files chimera number and good sequence number summs up, in directory `5_uchime_ref`:   
             ```
-            python ~/Documents/Fan/code/check_chimera_numbers.py good_reads/number_good_reads.txt chimeras/number_chimera.txt ../binned_assem/number_16S_assem.txt 
+            grep -c "@M0" /PATH/TO/initial_process_index/binned_assem_250-280/*.fastq > /PATH/TO/initial_process_index/number_reads_assem.txt
+            grep -c ">" chimeras/*.fa > number_chimera.txt
+            grep -c ">" good_otus/*.fa > number_good_otus.txt
+            python ~/Documents/Fan/code/check_chimera_numbers.py number_good_reads.txt number_chimera.txt ../binned_assem/number_16S_assem.txt 
             ```
 
 1. RDP unsupervised analysis: Classifier. group samples into their own groups, ie. cobs for cobs, spruce for spruce.
