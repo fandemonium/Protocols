@@ -41,8 +41,23 @@
     for i in *.fasta; do ~/usearch70 -usearch_global $i -db ../5_uchime_ref/good_otus_renamed/"$i"_unique.fasta_sorted.fa_otus1.fa_good.fa_otus.fa -strand plus -id 0.985 -uc ../6_map_reads/uc/"$i"_map.uc -matched ../6_map_reads/seqs/"$i"_matched.fa; done
     ``` 
 
-8. decide which samples should be analyzed together:
+8. decide which samples should be analyzed together and use `mkdir XXX` to put them into different folders    
 
+9. use RDP fungene pipeline to complete the rest:
+    1. make a folderi (outside of `uparse` directory):   
+        ```
+        mkdir 4_spruce_may312014_16S_ana
+        ```
+
+    2. setup option file:
+        ```
+        cd 4_spruce_may312014_16S_ana
+        mkdir workdir
+        ~/fungene_pipeline/fgp_wrapper.py ~/fungene_pipeline/examplefiles/16S_options.txt ~/fungene_pipeline/examplefiles/alignment_command.txt /PATH/TO/DIRECTORY/WITH/GOOD/SEQS/*.fa 
+        ```
+        
+        note: the clustering can take a LONG time. 
+ 
 
 
 
