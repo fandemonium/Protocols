@@ -43,8 +43,8 @@
 
 8. decide which samples should be analyzed together and use `mkdir XXX` to put them into different folders    
 
-9. use RDP fungene pipeline to complete the rest:
-    1. make a folderi (outside of `uparse` directory):   
+9. use RDP fungene pipeline to perform dereplication and sequence alignment:
+    1. make a folder in (outside of `uparse` directory):   
         ```
         mkdir 4_spruce_may312014_16S_ana
         ```
@@ -58,48 +58,52 @@
         
         note: the clustering can take a LONG time. 
  
+10. Calculate sequence distance matrix (in PATH/TO/4_spruce_may312014_rdp/16s_pipeline-job):
+    ```
+    java -Xmx16g -jar /Users/metagenomics/RDPTools/Clustering/dist/Clustering.jar dmatrix --id-mapping all_seqs.ids --in ./alignment/all_seqs_derep_aligned.fa --outfile ./dist_matrix/all_matrix.bin -m "#=GC_RF" -l 25 --dist-cutoff 0.03
+    ``` 
 
+11. from distance matrix to otu's (clustering):
+    ```
+    java -Xmx16g -jar ~/RDPTools/Clustering/dist/Clustering.jar cluster --method complete --id-mapping ../all_seqs.ids --sample-mapping ../all_seqs.samples --dist-file all_matrix.bin --outfile all_complete.clust --step 0.01
+    ```
 
-
-
-
-
-
-8. link matched sequences to 
-
+12. from cluster file to biom format:
+    ```
+    java -Xmx2g -jar ~/RDPTools/Clustering/dist/Clustering.jar cluster-to-biom dist_matrix/all_complete.clust 0.03 > dist_matrix/all_complete.clust.biom
+    ```
+    
+    Note: a flat otu table that can also be directly used in R using:
+        ```
+        java -Xmx4g -jar ~/RDPTools/Clustering/dist/Clustering.jar cluster_to_Rformat all_complete.clust . 0.03 0.03
+        ```
         
-1. RDP unsupervised analysis: Classifier. group samples into their own groups, ie. cobs for cobs, spruce for spruce.
-    ```
-    java -Xmx4g -jar ~/RDPTools/classifier.jar classify -g fungalits_warcup -c 0.5 -f fixrank -o Spruce_2013_ITS_classified_0.5.txt -h Spruce_2013_ITS_hier.txt *.fa
-    ```
+        But one can't use flat otu table directly to work with Phyloseq in R, because it uses "OTU_" instead of "cluster_". Therefore, if you are using RDP tools and phyloseq, use biom format.   
 
+13. get representative sequences per each otu identified (same otu id's like those in your biom file):
     ```
-    java -Xmx4g -jar ~/RDPTools/classifier.jar classify -g fungalits_warcup -c 0.5 -f filterbyconf -o Spruce_2013_ITS_classified_0.5_filtered_rank.txt all_otus.fa 
+    java -Xmx4g -jar ~/RDPTools/Clustering/dist/Clustering.jar rep-seqs -c --id-mapping all_seqs.ids --one-rep-per-otu dist_matrix/all_complete.clust 0.03 alignment/all_seqs_derep_aligned.fasta
     ```
 
-Mapping back:
-```
-for i in *_0.5.fasta; do ~/usearch70 -usearch_global $i -db ../6_consolidate_otus/all_otus.fa -strand plus -id 0.97 -uc ../7_map_uc/"$i"_map.uc; done
-```
+14. classify the otu representative seqs according to biom file:
+    ```
+    java -Xmx4g -jar ~/RDPTools/classifier/dist/classifier.jar classify -c 0.5 -f biom -m dist_matrix/all_complete.clust.biom -o dist_matrix/all_complete.clust_classified.biom all_complete.clust_rep_seqs.fasta
+    ```
 
-Add sample name to map.uc
-```
-for i in *.uc; do python ~/Documents/Fan/code/usearch_map_uc_parser.py $i > ../map_uc_sample/"$i".sample; done
-```
-When mapping map.uc back to the sequence, I think the singletons are also included when mapping. considering the whole point of removing singletons because they are errorness. Should get rid of the singletons from the very beginning?
+15. Phyloseq can also store representative sequences as part of their database management. But sequence alignments have to be destroyed and the sequence names have to also match to the cluster names.
+    ```
+    java -Xmx4g -jar ~/RDPTools/Clustering/dist/Clustering.jar to-unaligned-fasta all_complete.clust_rep_seqs.fasta | cut -f1 -d ' ' > all_complete.clust_rep_seqs_unaligned_short_name_phyloseq.fasta
+    ```
 
-For 16S:
-```
-~/usearch70 -usearch_global ../../16s_test.fasta -db uparse_test_otu_clust_0.97_otusn.fasta -strand plus -id 0.97 -matched 16s_test_matched.fa -uc 16s_test_readmap.uc
-```
+16. Since you are at it, might as well add the phylogenetic tree to the phyloseq database:
+    1. first of all, extract alignment positions from sequences:    
+        ```
+        java -Xms4g -jar ~/RDPTools/Clustering/dist/Clustering.jar derep -f -o all_complete.clust_rep_seqs_modelonly.fasta rep_seqs.ids rep_seqs.sample all_complete.clust_rep_seqs.fasta
+        ```
+ 
+    2. use fasttree to build a phylogenetic tree based on the model postion:
+        ```
+        ~/FastTree -nt -gtr < all_complete.clust_rep_seqs.fasta > all_complete.clust_rep_seqs_tree.nwk
+        ```
 
-java -Xmx4g -jar /Users/metagenomics/RDPTools/Clustering.jar derep --unaligned -o /Users/metagenomics/Documents/2013_ITS_fy/uparsed/6_consolidate_otus/rdp_derep/all_seqs_derep.fasta /Users/metagenomics/Documents/2013_ITS_fy/uparsed/6_consolidate_otus/rdp_derep/all_seqs.ids /Users/metagenomics/Documents/2013_ITS_fy/uparsed/6_consolidate_otus/rdp_derep/all_seqs.samples /Users/metagenomics/Documents/2013_ITS_fy/uparsed/6_consolidate_otus/all_maxee_0.5.fa
-
-
-increase the break number to avoid new false chimeras
-~/usearch70 -cluster_otus cat_otu_good_derep_sorted.fa -otuid 0.985 -uparse_break -100.0 -otus all_otus1.fa -fastaout all_header_otus1.fa
-
-for i in *.fasta; do ~/usearch70 -usearch_global $i -db ../6_consolidate_otus/all_otusn.fa -strand plus -id 0.985 -uc ../7_map_uc/map_uc/"$"_map.uc; done
-
-16S:
-for i in *.fasta; do ~/usearch70 -usearch_global $i -db ../5_uchime_ref/good_otus_renamed/"$i"_unique.fasta_sorted.fa_otus1.fa_good.fa_otus.fa -strand plus -id 0.985 -uc ../6_map_reads/uc/"$i"_map.uc -matched ../6_map_reads/seqs/"$i"_matched.fa; done
+17. now you should have all of the files you need for community analysis in R.         
