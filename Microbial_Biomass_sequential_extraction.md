@@ -20,8 +20,8 @@ Adopted from
 1. 1st extraction:   
     1. Add 24ml 0.5 M K<sub>2</sub>SO<sub>4</sub> directly into the subsampled soil containing tubes   
         1. 1:3 soil weight/K<sub>2</sub>SO<sub>4</sub> volume   
-    2. Place on shaker for 2 hours at 200 rpm at room temp (~23ºC)   
-    3. Balance tubes and centrifuge at 4000 rpm for 20 min   
+    2. Place on shaker for 2 hours at 200 rpm at room temp (~25ºC)   
+    3. Balance tubes and centrifuge at 4000 rpm for 15 min   
     4. Gravity filter the supernatant through K<sub>2</sub>SO<sub>4</sub> leached filter papers   
         2. Into pre-labeled 25ml scintillation vials   
         3. Pour carefully to avoid splashes  
