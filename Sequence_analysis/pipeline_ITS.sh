@@ -1,3 +1,7 @@
+## Author: Fan Yang ##
+## change pathways before use ##
+## need RDPTools (https://github.com/rdpstaff/RDPTools), usearch (http://www.drive5.com/usearch/), python 2.7, biopython module, extended panda-seq (http://rdp.cme.msu.edu/download/RDP_Assembler.tgz) ##
+ 
 NAME="ITS"
 LOCATION="/PATH/TO/OUTPUT/DIRECTORY"
 INDEX_FILE="/PATH/TO/INDEX/FASTQ"
@@ -70,20 +74,23 @@ cat *_good.fa > $LOCATION/2_"$NAME"_uparse/consoilidate_otus/cat_otu_good.fa
 cd $LOCATION/2_"$NAME"_uparse/consoilidate_otus
 $USEARCH -derep_fulllength cat_otu_good.fa -output cat_otu_good_derep.fa -sizeout
 $USEARCH -sortbysize cat_otu_good_derep.fa -output cat_otu_good_derep_sorted.fa -minsize 1
-$USEARCH -cluster_otus cat_otu_good_derep_sorted.fa -otuid 0.985 -otus all_otus.fa
-
+$USEARCH -cluster_otus cat_otu_good_derep_sorted.fa -otuid 0.985 -uparse_break -100.0 -otus all_otus.fa
 
 echo "renaming otus that are rid of chimeras to 'OTU_XX' ..."
-mkdir $LOCATION/2_"$NAME"_uparse/chime_ref/good_otus_renamed
-cd $LOCATION/2_"$NAME"_uparse/chime_ref/good_otus
-for i in *_good.fa; do python $UPARSE_PY/fasta_number.py $i OTU_ > $LOCATION/2_"$NAME"_uparse/chime_ref/good_otus_renamed/"$i"_otu2.fa; done
+cd $LOCATION/2_"$NAME"_uparse/consoilidate_otus
+python $UPARSE_PY/fasta_number.py all_otus.fa OTU_ > all_otus_renamed.fa
 echo "done"
 
-echo "mapping all sequences (including singletons) back to good OTU's of individual samples ..."
+echo "classify each otu ..."
+mkdir $LOCATION/final
+java -Xmx4g -jar $CLASSIFIER classify -g fungalits_warcup -c 0.5 -f fixrank -o $LOCATION/final/all_otus_renamed_ITS_classified_0.5.txt -h $LOCATION/final/all_otus_renamed_ITS_hier.txt all_otus_renamed.fa
+
+echo "mapping all sequences (including singletons) back to final otu's ..."
 mkdir $LOCATION/2_"$NAME"_uparse/mapped $LOCATION/2_"$NAME"_uparse/mapped/uc $LOCATION/2_"$NAME"_uparse/mapped/seqs
 cd 2_"$NAME"_uparse/quality_filtered
-for i in *.5.fasta; do $USEARCH  -usearch_global $i -db $LOCATION/2_"$NAME"_uparse/chime_ref/good_otus_renamed/"$i"_unique.fasta_sorted.fa_otus1.fa_good.fa_otus.fa -strand plus -id 0.985 -uc $LOCATION/2_"$NAME"_uparse/mapped/uc/"$i"_map.uc -matched $LOCATION/2_"$NAME"_uparse/mapped/seqs/"$i"_matched.fa; done
+for i in *.5.fasta; do $USEARCH  -usearch_global $i -db $LOCATION/2_"$NAME"_uparse/consoilidate_otus/all_otus_renamed.fa -strand plus -id 0.985 -uc $LOCATION/2_"$NAME"_uparse/mapped/uc/"$i"_map.uc -matched $LOCATION/2_"$NAME"_uparse/mapped/seqs/"$i"_matched.fa; done
 echo "done"
 
 echo "writing out otu table ..."
-
+cd $LOCATION/2_"$NAME"_uparse/mapped/uc
+python $UPARSE_PY/uc2otutab.py *.uc > $LOCATION/final/otu_table.txt
