@@ -1,3 +1,9 @@
+## BEFORE START 
+## update full pathways and parameters from line 7 to line 30. some pathways can be found in macpro_some_pathways.md
+## this pipeline is specifically for 16S
+## mapping files should be already formatted into RDP format and excel carriage returns removed 
+## change java heapspace (-Xmx) to 1/4 or less of your max machine ram.
+
 NAME="rdp"
 LOCATION="/home/ubuntu/data/data3/fan/pitfoaming"
 #INDEX_FILE="/Users/metagenomics/Documents/2014_COBS_Spruce_cdna/0_original/Undetermined_S0_L001_I1_001.fastq.gz"
