@@ -43,20 +43,28 @@
 
 8. decide which samples should be analyzed together and use `mkdir XXX` to put them into different folders    
 
-9. use RDP fungene pipeline to perform dereplication and sequence alignment:
-    1. make a folder in (outside of `uparse` directory):   
-        ```
-        mkdir 4_spruce_may312014_16S_ana
-        ```
-
-    2. setup option file:
-        ```
-        cd 4_spruce_may312014_16S_ana
-        mkdir workdir
-        ~/fungene_pipeline/fgp_wrapper.py ~/fungene_pipeline/examplefiles/16S_options.txt ~/fungene_pipeline/examplefiles/alignment_command.txt /PATH/TO/DIRECTORY/WITH/GOOD/SEQS/*.fa 
-        ```
-        
+#9. use RDP fungene pipeline to perform dereplication and sequence alignment:
+#    1. make a folder in (outside of `uparse` directory):   
+#        ```
+#        mkdir 4_spruce_may312014_16S_ana
+#        ```
+#
+#    2. setup option file:
+#        ```
+#        cd 4_spruce_may312014_16S_ana
+#        mkdir workdir
+#        ~/fungene_pipeline/fgp_wrapper.py ~/fungene_pipeline/examplefiles/16S_options.txt ~/fungene_pipeline/examplefiles/alignment_command.txt /PATH/TO/DIRECTORY/WITH/GOOD/SEQS/*.fa 
+#        ```
+#        
         note: the clustering can take a LONG time. 
+
+9. derep for align:
+java -Xmx16g -jar /Users/metagenomics/RDPTools/Clustering.jar derep --unaligned -o
+
+java -Xmx16g -jar /Users/metagenomics/RDPTools/Clustering.jar cluster --method complete --id-mapping /Users/metagenomics/Documents/2013_16S_fy/uparse/7_16S_alignment/SPRUCE_16s_alignment/all_seqs.ids --sample-mapping /Users/metagenomics/Documents/2013_16S_fy/uparse/7_16S_alignment/SPRUCE_16s_alignment/all_seqs.samples --dist-file /Users/metagenomics/Documents/2013_16S_fy/uparse/7_16S_alignment/SPRUCE_16s_alignment/dist_matrix/all_seqs_derep_aligned.fasta_matrix.bin --outfile /Users/metagenomics/Documents/2013_16S_fy/uparse/7_16S_alignment/SPRUCE_16s_alignment/clustering/all_seqs_derep_aligned.fasta_complete.clust --step 0.03
+
+10. align:
+/Users/metagenomics/infernal111/bin/cmalign -g --noprob -o /Users/metagenomics/Documents/2013_16S_fy/uparse/7_16S_alignment/SPRUCE_16s_alignment/alignment/splits/all_seqs_derep/8_all_seqs_derep.fasta.out /Users/metagenomics/fungene_pipeline/resources/RRNA_16S_BACTERIA/model.cm /Users/metagenomics/Documents/2013_16S_fy/uparse/7_16S_alignment/SPRUCE_16s_alignment/alignment/splits/8_all_seqs_derep.fasta
  
 10. Calculate sequence distance matrix (in PATH/TO/4_spruce_may312014_rdp/16s_pipeline-job):
     ```
